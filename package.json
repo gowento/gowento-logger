@@ -1,0 +1,61 @@
+{
+  "name": "gowento-logger",
+  "version": "1.0.0",
+  "description": "Gowento Logger",
+  "author": "Gowento",
+  "contributors": [
+    "Eric Redon <eric@gowento.com>"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "eslint src test --cache",
+    "check": "npm run lint -s && dependency-check package.json --entry src",
+    "watch": "watch 'npm run build' src test",
+    "prebuild": "npm run check -s && npm run clean -s",
+    "build": "babel --optional runtime src -d dist",
+    "postbuild": "npm run test -s",
+    "test": "NODE_ENV=test nf run -- PORT=0 ava",
+    "coverage": "nyc npm test && nyc report --reporter=html",
+    "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
+    "postcoveralls": "rimraf ./coverage",
+    "prepublish": "npm run build -s",
+    "deploy": "git pull --rebase origin master && git push origin master",
+    "patch": "npm version patch && npm publish",
+    "minor": "npm version minor && npm publish",
+    "major": "npm version major && npm publish",
+    "postpublish": "git push origin master --follow-tags",
+    "toc": "doctoc --github --title \"# Changelog\" CHANGELOG.md"
+  },
+  "ava": {
+    "failFast": false,
+    "verbose": false,
+    "require": [
+      "babel-core/register"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gowento/gowento-logger.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/gowento/gowento-logger#readme",
+  "devDependencies": {
+    "ava": "*",
+    "babel-cli": "*",
+    "babel-core": "*",
+    "babel-eslint": "*",
+    "babel-preset-es2015": "*",
+    "babel-register": "*",
+    "coveralls": "*",
+    "dependency-check": "*",
+    "doctoc": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-plugin-ava": "*",
+    "foreman": "*",
+    "nyc": "*",
+    "rimraf": "*",
+    "watch": "*"
+  }
+}
