@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "lint": "eslint src test --cache",
-    "check": "npm run lint -s && dependency-check package.json --entry src",
+    "check": "npm run lint -s && dependency-check package.json --entry src/logger.js",
     "watch": "watch 'npm run build' src test",
     "prebuild": "npm run check -s && npm run clean -s",
     "build": "babel --optional runtime src -d dist",
