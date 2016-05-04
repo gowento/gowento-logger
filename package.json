@@ -6,7 +6,7 @@
   "contributors": [
     "Eric Redon <eric@gowento.com>"
   ],
-  "main": "dist/index.js",
+  "main": "dist/logger.js",
   "scripts": {
     "clean": "rimraf dist",
     "lint": "eslint src test --cache",
@@ -57,5 +57,8 @@
     "nyc": "*",
     "rimraf": "*",
     "watch": "*"
+  },
+  "dependencies": {
+    "lodash": "^4.11.2"
   }
 }
