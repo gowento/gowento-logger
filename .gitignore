@@ -2,10 +2,13 @@
 logs
 *.log
 node_modules
-dist
 tmp
 coverage
 npm-debug.log
 .eslintcache
 .env
 .nyc_output
+
+# While this module is privately hosted on Bitbucket,
+# the `dist` directory must be committed along
+# dist
