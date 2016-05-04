@@ -50,6 +50,7 @@
     "coveralls": "*",
     "dependency-check": "*",
     "doctoc": "*",
+    "escape-string-regexp": "^1.0.5",
     "eslint": "*",
     "eslint-config-airbnb": "*",
     "eslint-plugin-ava": "*",

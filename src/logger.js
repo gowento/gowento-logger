@@ -24,18 +24,20 @@ function centerTruncate(str, strLen = 125, separator = '...') {
 /**
  * logfmt-style stringify with support for sub objects
  */
-function stringify(object) {
+function stringify(object, { truncateValues = false } = {}) {
   const lineElements = [];
 
   _.forEach(object, (value, key) => {
-    let retVal;
+    let stringifiedValue;
     if (_.isNil(value)) {
-      retVal = '';
+      stringifiedValue = '';
+    } else if (_.isPlainObject(value)) {
+      stringifiedValue = `{${stringify(value, { truncateValues: true })}}`;
     } else {
-      retVal = _.isPlainObject(value) ? `{${stringify(value)}}` : centerTruncate(value.toString());
+      stringifiedValue = truncateValues ? centerTruncate(value.toString()) : value.toString();
     }
 
-    lineElements.push(`${key}=${retVal}`);
+    lineElements.push(`${key}=${stringifiedValue}`);
   });
 
   return lineElements.join(' ');
@@ -45,7 +47,6 @@ function logObject(object) {
   console.log(stringify(object));
 }
 
-// logfmt-style log with support for sub objects
 function log(data) {
   if (_.isPlainObject(data)) {
     logObject(data);
