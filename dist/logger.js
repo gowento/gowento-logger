@@ -11,8 +11,8 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function centerTruncate(str) {
-  var strLen = arguments.length <= 1 || arguments[1] === undefined ? 125 : arguments[1];
-  var separator = arguments.length <= 2 || arguments[2] === undefined ? '...' : arguments[2];
+  var strLen = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 125;
+  var separator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '...';
 
   if (!str) {
     return null;
@@ -36,10 +36,9 @@ function centerTruncate(str) {
  * logfmt-style stringify with support for sub objects
  */
 function stringify(object) {
-  var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-  var _ref$truncateValues = _ref.truncateValues;
-  var truncateValues = _ref$truncateValues === undefined ? false : _ref$truncateValues;
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$truncateValues = _ref.truncateValues,
+      truncateValues = _ref$truncateValues === undefined ? false : _ref$truncateValues;
 
   var lineElements = [];
 
@@ -76,3 +75,4 @@ exports.default = {
   logObject: logObject,
   stringify: stringify
 };
+//# sourceMappingURL=logger.js.map

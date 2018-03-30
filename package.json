@@ -1,65 +1,53 @@
 {
   "name": "gowento-logger",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Gowento Logger",
   "author": "Gowento",
   "contributors": [
-    "Eric Redon <eric@gowento.com>"
+    "Eric Redon <eric@gowento.com>",
+    "Loris Guignard <loris@gowento.com>"
   ],
   "main": "dist/logger.js",
   "scripts": {
     "clean": "rimraf dist",
     "lint": "eslint src test --cache",
-    "check": "npm run lint -s && dependency-check package.json --entry src/logger.js",
-    "watch": "watch 'npm run build' src test",
-    "prebuild": "npm run check -s && npm run clean -s",
+    "prebuild": "yarn run clean -s",
     "build": "babel --optional runtime src -d dist",
-    "postbuild": "npm run test -s",
-    "test": "NODE_ENV=test nf run -- PORT=0 ava",
-    "coverage": "nyc npm test && nyc report --reporter=html",
-    "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
-    "postcoveralls": "rimraf ./coverage",
-    "prepublish": "npm run build -s",
+    "postbuild": "yarn run test -s",
+    "test": "ava",
+    "prepublish": "yarn run build -s",
     "deploy": "git pull --rebase origin master && git push origin master",
-    "patch": "npm version patch && npm publish",
-    "minor": "npm version minor && npm publish",
-    "major": "npm version major && npm publish",
-    "postpublish": "git push origin master --follow-tags",
-    "toc": "doctoc --bitbucket --title \"# Changelog\" CHANGELOG.md"
+    "patch": "yarn version patch && yarn publish",
+    "minor": "yarn version minor && yarn publish",
+    "major": "yarn version major && yarn publish",
+    "postpublish": "git push origin master --follow-tags"
   },
   "ava": {
     "failFast": false,
     "verbose": false,
     "require": [
-      "babel-core/register"
+      "babel-register"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:gowento/gowento-logger.git"
+    "url": "git@bitbucket.org:gowento/logger.git"
   },
   "license": "MIT",
-  "homepage": "https://github.com/gowento/gowento-logger#readme",
+  "homepage": "https://bitbucket.org/gowento/logger#readme",
   "devDependencies": {
-    "ava": "*",
-    "babel-cli": "*",
-    "babel-core": "*",
-    "babel-eslint": "*",
-    "babel-preset-es2015": "*",
-    "babel-register": "*",
-    "coveralls": "*",
-    "dependency-check": "*",
-    "doctoc": "*",
-    "escape-string-regexp": "^1.0.5",
-    "eslint": "*",
-    "eslint-config-airbnb": "*",
-    "eslint-plugin-ava": "*",
-    "foreman": "*",
-    "nyc": "*",
-    "rimraf": "*",
-    "watch": "*"
+    "ava": "0.25.0",
+    "babel-cli": "6.26.0",
+    "babel-plugin-lodash": "3.3.2",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-preset-env": "1.6.1",
+    "babel-register": "6.26.0",
+    "eslint": "4.19.1",
+    "eslint-config-gowento": "4.2.0",
+    "rimraf": "2.6.2"
   },
   "dependencies": {
-    "lodash": "^4.11.2"
+    "heroku-logger": "0.3.0",
+    "lodash": "4.17.5"
   }
 }
