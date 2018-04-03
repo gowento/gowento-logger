@@ -76,7 +76,7 @@ class Logger {
     const {
       color = (NODE_ENV !== 'production'),
       readable = (NODE_ENV !== 'production'),
-      delimiter = '#',
+      delimiter = '.',
     } = options;
     let {
       level = (LOG_LEVEL || 'info'),
@@ -204,11 +204,4 @@ class Logger {
 
 const logger = new Logger();
 
-/**
- * Export.
- *
- * @type {Logger}
- */
-
-module.exports = exports = logger;
-exports.Logger = Logger;
+export default logger;
