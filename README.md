@@ -1,7 +1,6 @@
 # gowento-logger
 
 [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![Dependency Status][depstat-image]][depstat-url]
 [![Downloads][download-badge]][npm-url]
@@ -17,9 +16,22 @@ npm i gowento-logger
 ## Usage
 
 ```js
-import gowentoLogger from "gowento-logger"
+import logger from "gowento-logger"
 
-gowentoLogger() // true
+logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
+logger.warn('warn message');
+logger.error(new Error('Foo'));
+logger.debug('should be hidden');
+
+const logger2 = logger.clone({
+  level: 'debug',
+  color: false,
+  readable: false,
+  prefix: 'foo.',
+});
+
+logger2.debug('should be visible');
+logger2.warn('no color', { foo: 'bar' });
 ```
 
 ## License

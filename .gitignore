@@ -1,6 +1,6 @@
 ### App-specific.gitignore
 .env
-
+dist
 ### Node.gitignore
 .eslintcache
 # Logs
