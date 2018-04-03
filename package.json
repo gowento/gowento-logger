@@ -47,7 +47,7 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "heroku-logger": "0.3.0",
+    "heroku-logger": "loris/heroku-logger#83856e4",
     "lodash": "4.17.5"
   }
 }

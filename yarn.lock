@@ -1806,7 +1806,7 @@ fbjs@^0.8.16:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
-figures@^2.0.0:
+figures@2.0.0, figures@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
   dependencies:
@@ -2105,11 +2105,12 @@ hawk@3.1.3, hawk@~3.1.3:
     hoek "2.x.x"
     sntp "1.x.x"
 
-heroku-logger@0.3.0:
+heroku-logger@loris/heroku-logger#83856e4:
   version "0.3.0"
-  resolved "https://registry.yarnpkg.com/heroku-logger/-/heroku-logger-0.3.0.tgz#30f3bc866e574142349d499a093782a8a9c1bcb2"
+  resolved "https://codeload.github.com/loris/heroku-logger/tar.gz/83856e4079b63be8515e0a1af1488df6ef20e2fb"
   dependencies:
     chalk "^1.1.3"
+    figures "2.0.0"
     flat "^2.0.1"
     is "^3.2.1"
     logfmt "^1.2.0"
