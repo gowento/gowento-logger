@@ -1,3 +1,6 @@
 {
-  "extends": "gowento"
+  "extends": "gowento",
+  "rules": {
+    "lodash/prefer-lodash-typecheck": 0
+  }
 }

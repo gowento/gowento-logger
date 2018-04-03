@@ -1,26 +1,33 @@
 import test from 'ava';
-import log from '../src/logger';
+import logger from '../src/logger';
 
-log.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
-log.warn('warn message');
-log.error(new Error('Foo'));
-log.debug('should be hidden');
+test.cb('log exports', t => {
+  t.is(typeof logger, 'object');
+  t.is(typeof logger.debug, 'function');
+  t.is(typeof logger.info, 'function');
+  t.is(typeof logger.warn, 'function');
+  t.is(typeof logger.error, 'function');
+  t.is(typeof logger.clone, 'function');
 
-const log2 = log.clone({
-  level: 'debug',
-  color: false,
-  readable: false,
-  prefix: 'foo.',
-});
+  logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
+  logger.warn('warn message');
+  logger.error(new Error('Foo'));
+  logger.debug('should be hidden');
 
-log2.debug('should be visible');
-log2.warn('no color', { foo: 'bar' });
+  const log2 = logger.clone({
+    level: 'debug',
+    color: false,
+    readable: false,
+    prefix: 'foo.',
+  });
 
-test('log exports', t => {
-  t.is(typeof log, 'object');
-  t.is(typeof log.debug, 'function');
-  t.is(typeof log.info, 'function');
-  t.is(typeof log.warn, 'function');
-  t.is(typeof log.error, 'function');
-  t.is(typeof log.clone, 'function');
+  log2.debug('should be visible');
+  log2.warn('no color', { foo: 'bar' });
+
+  const timerLogger = logger.clone({ timer: true });
+  const timer = timerLogger.info('this is a timer', { foo: 'bar' });
+  setTimeout(() => {
+    timer.end({ bar: 'baz' });
+    t.end();
+  }, 500);
 });

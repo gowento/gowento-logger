@@ -29,6 +29,7 @@ const logfmt = new Logfmt();
 const LEVELS = {
   debug: 1,
   info: 2,
+  start: 2,
   warn: 3,
   error: 4,
 };
@@ -42,6 +43,7 @@ const LEVELS = {
 const COLORS = {
   debug: chalk.gray,
   info: chalk.blue,
+  start: chalk.green,
   warn: chalk.yellow,
   error: chalk.red,
 };
@@ -55,8 +57,10 @@ const COLORS = {
 const ICONS = {
   debug: figures('…'),
   info: figures('ℹ'),
-  error: figures('✖'),
+  start: figures('✔'),
   warn: figures('⚠'),
+  error: figures('✖'),
+  default: figures('❯'),
 };
 
 /**
@@ -77,6 +81,7 @@ class Logger {
       color = (NODE_ENV !== 'production'),
       readable = (NODE_ENV !== 'production'),
       delimiter = '.',
+      timer = false,
     } = options;
     let {
       level = (LOG_LEVEL || 'info'),
@@ -104,6 +109,7 @@ class Logger {
       readable: !!readable,
       threshold: level === 'none' ? Infinity : LEVELS[level],
       delimiter,
+      timer: !!timer,
     };
 
     for (const key in LEVELS) {
@@ -144,9 +150,22 @@ class Logger {
       message = String(message);
     }
 
-    const { threshold, prefix } = this.config;
+    const { threshold, prefix, timer } = this.config;
     const value = LEVELS[level];
     if (value < threshold) return;
+
+
+    // If logger is a timer, we return an object with an "end" method to be called later on
+    // Logger will display an additionnal elapsed property.
+    if (timer) {
+      const start = new Date();
+      return {
+        end: (additionnalData) => {
+          const output = this.format(level, prefix + message, { ...data, ...additionnalData, elapsed: `${(new Date() - start)}ms` });
+          console.log(output); // eslint-disable-line no-console
+        },
+      };
+    }
 
     const output = this.format(level, prefix + message, data);
     console.log(output); // eslint-disable-line no-console
@@ -164,9 +183,8 @@ class Logger {
     const { color, readable, delimiter } = this.config;
     const value = LEVELS[level];
     const flat = flatten(data, { delimiter });
-    const ctx = { ...flat, level, message };
-    const string = logfmt.stringify(ctx);
-    const icon = ICONS[level] || figures('❯');
+    const string = logfmt.stringify(readable ? flat : { level, message, ...flat });
+    const icon = ICONS[level] || ICONS.default;
 
     if (readable && color) {
       const tag = `${COLORS[level](`${icon} ${level}`)}`;
@@ -176,7 +194,6 @@ class Logger {
     } else if (readable) {
       return `${icon} ${level}\t${message} ${string}`;
     }
-
 
     return string;
   }
