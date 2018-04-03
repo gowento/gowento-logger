@@ -1,8 +1,214 @@
-import { Logger } from 'heroku-logger';
+const Logfmt = require('logfmt');
+const chalk = require('chalk');
+const flatten = require('flat');
+const figures = require('figures');
 
-// Export logger instance with sane defaults
-const logger = new Logger({
-  delimiter: '.',
-});
+/**
+ * Environment variables, with a client-side guard.
+ *
+ * @type {String}
+ */
 
-export default logger;
+const LOG_LEVEL = typeof process !== 'undefined' && process.env.LOG_LEVEL;
+const NODE_ENV = typeof process !== 'undefined' && process.env.NODE_ENV;
+
+/**
+ * Logfmt helper.
+ *
+ * @type {Logfmt}
+ */
+
+const logfmt = new Logfmt();
+
+/**
+ * Log levels.
+ *
+ * @type {Object}
+ */
+
+const LEVELS = {
+  debug: 1,
+  info: 2,
+  warn: 3,
+  error: 4,
+};
+
+/**
+ * Log level colors.
+ *
+ * @type {Object}
+ */
+
+const COLORS = {
+  debug: chalk.gray,
+  info: chalk.blue,
+  warn: chalk.yellow,
+  error: chalk.red,
+};
+
+/**
+ * Log level icons.
+ *
+ * @type {Object}
+ */
+
+const ICONS = {
+  debug: figures('…'),
+  info: figures('ℹ'),
+  error: figures('✖'),
+  warn: figures('⚠'),
+};
+
+/**
+ * Define the `Logger` class.
+ *
+ * @type {Logger}
+ */
+
+class Logger {
+  /**
+   * Constructor.
+   *
+   * @param {Object} options
+   */
+
+  constructor(options = {}) {
+    const {
+      color = (NODE_ENV !== 'production'),
+      readable = (NODE_ENV !== 'production'),
+      delimiter = '#',
+    } = options;
+    let {
+      level = (LOG_LEVEL || 'info'),
+      prefix = '',
+    } = options;
+
+    if (typeof level !== 'string') {
+      level = 'none';
+    }
+
+    level = level.toLowerCase();
+
+    if (!(level in LEVELS)) {
+      level = 'none';
+    }
+
+    if (typeof prefix !== 'string') {
+      prefix = String(prefix);
+    }
+
+    this.config = {
+      level,
+      prefix,
+      color: !!color,
+      readable: !!readable,
+      threshold: level === 'none' ? Infinity : LEVELS[level],
+      delimiter,
+    };
+
+    for (const key in LEVELS) {
+      this[key] = (message, data) => this.log(key, message, data);
+    }
+  }
+
+  /**
+   * Log to the console with `level`, `message` and `data`.
+   *
+   * @param {String} level
+   * @param {String} message
+   * @param {Object} data
+   */
+
+  log(level, message, data) {
+    if (typeof level !== 'string') {
+      level = 'info';
+    }
+
+    level = level.toLowerCase();
+
+    if (!(level in LEVELS)) {
+      level = 'info';
+    }
+
+    if (typeof data !== 'object') {
+      data = {};
+    }
+
+    if (message instanceof Error) {
+      data.error = message;
+      data.stack = message.stack;
+      message = message.message;
+    }
+
+    if (typeof message !== 'string') {
+      message = String(message);
+    }
+
+    const { threshold, prefix } = this.config;
+    const value = LEVELS[level];
+    if (value < threshold) return;
+
+    const output = this.format(level, prefix + message, data);
+    console.log(output); // eslint-disable-line no-console
+  }
+
+  /**
+   * Format a log with `level`, `message` and `data`.
+   *
+   * @param {String} level
+   * @param {String} message
+   * @param {Object} data
+   */
+
+  format(level, message, data) {
+    const { color, readable, delimiter } = this.config;
+    const value = LEVELS[level];
+    const flat = flatten(data, { delimiter });
+    const ctx = { ...flat, level, message };
+    const string = logfmt.stringify(ctx);
+    const icon = ICONS[level] || figures('❯');
+
+    if (readable && color) {
+      const tag = `${COLORS[level](`${icon} ${level}`)}`;
+      const msg = value > 3 ? chalk.red(message) : message;
+      const obj = `${chalk.gray(string)}`;
+      return `${tag}\t${msg} ${obj}`;
+    } else if (readable) {
+      return `${icon} ${level}\t${message} ${string}`;
+    }
+
+
+    return string;
+  }
+
+  /**
+   * Create a new logger, extending the current logger's config.
+   *
+   * @param {Object} options
+   * @return {Logger}
+   */
+
+  clone(options = {}) {
+    return new Logger({
+      ...this.config,
+      ...options,
+    });
+  }
+}
+
+/**
+ * Create a logger singleton with sane defaults.
+ *
+ * @type {Logger}
+ */
+
+const logger = new Logger();
+
+/**
+ * Export.
+ *
+ * @type {Logger}
+ */
+
+module.exports = exports = logger;
+exports.Logger = Logger;
