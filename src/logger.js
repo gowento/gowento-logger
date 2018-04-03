@@ -81,7 +81,7 @@ class Logger {
       color = (NODE_ENV !== 'production'),
       readable = (NODE_ENV !== 'production'),
       delimiter = '.',
-      timer = false,
+      timer = null,
     } = options;
     let {
       level = (LOG_LEVEL || 'info'),
@@ -109,7 +109,7 @@ class Logger {
       readable: !!readable,
       threshold: level === 'none' ? Infinity : LEVELS[level],
       delimiter,
-      timer: !!timer,
+      timer,
     };
 
     for (const key in LEVELS) {
@@ -155,16 +155,8 @@ class Logger {
     if (value < threshold) return;
 
 
-    // If logger is a timer, we return an object with an "end" method to be called later on
-    // Logger will display an additionnal elapsed property.
     if (timer) {
-      const start = new Date();
-      return {
-        end: (additionnalData) => {
-          const output = this.format(level, prefix + message, { ...data, ...additionnalData, elapsed: `${(new Date() - start)}ms` });
-          console.log(output); // eslint-disable-line no-console
-        },
-      };
+      data.elapsed = `${(new Date() - timer)}ms`;
     }
 
     const output = this.format(level, prefix + message, data);
@@ -210,6 +202,10 @@ class Logger {
       ...this.config,
       ...options,
     });
+  }
+
+  timer() {
+    return this.clone({ timer: new Date() });
   }
 }
 

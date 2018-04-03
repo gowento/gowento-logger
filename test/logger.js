@@ -24,10 +24,9 @@ test.cb('log exports', t => {
   log2.debug('should be visible');
   log2.warn('no color', { foo: 'bar' });
 
-  const timerLogger = logger.clone({ timer: true });
-  const timer = timerLogger.info('this is a timer', { foo: 'bar' });
+  const timerLogger = logger.timer();
   setTimeout(() => {
-    timer.end({ bar: 'baz' });
+    timerLogger.info('this is a timer', { foo: 'bar' });
     t.end();
   }, 500);
 });
