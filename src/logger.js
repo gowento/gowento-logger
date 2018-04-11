@@ -112,9 +112,9 @@ class Logger {
       timer,
     };
 
-    for (const key in LEVELS) {
+    Object.keys(LEVELS).forEach(key => {
       this[key] = (message, data) => this.log(key, message, data);
-    }
+    });
   }
 
   /**
@@ -125,7 +125,11 @@ class Logger {
    * @param {Object} data
    */
 
-  log(level, message, data) {
+  log(_level, _message, _data) {
+    let level = _level;
+    let message = _message;
+    let data = _data;
+
     if (typeof level !== 'string') {
       level = 'info';
     }
@@ -143,7 +147,7 @@ class Logger {
     if (message instanceof Error) {
       data.error = message;
       data.stack = message.stack;
-      message = message.message;
+      message = message.message; // eslint-disable-line prefer-destructuring
     }
 
     if (typeof message !== 'string') {
