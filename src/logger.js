@@ -217,4 +217,46 @@ class Logger {
 
 const logger = new Logger();
 
+/**
+ * Express request logger middleware
+ */
+export const expressRequestLoggerMiddleware = () => (req, res, next) => {
+  // Skip requests from ping bots
+  if (/bot=(NewRelic|UptimeRobot)/.test(req.url)) {
+    return next();
+  }
+
+  const log = {
+    method: req.method,
+    host: req.get('host'),
+    path: req.originalUrl || req.path || req.url,
+    status: res.statusCode,
+    ip: req.ip || req.get('x-forwarded-for') || req.connection.remoteAddress,
+    ua: req.get('user-agent'),
+  };
+
+  // Add countryCode from Cloudflare IP country header
+  const countryCode = (req.get('cf-ipcountry') || '').toUpperCase();
+  if (countryCode) {
+    log.countryCode = countryCode;
+  }
+
+  // Add requestId from Heroku Request-ID header
+  const requestId = req.get('x-request-id');
+  if (requestId) {
+    log.requestId = requestId;
+  }
+
+  // Patch res.end to time request execution
+  const timer = logger.timer();
+  const { end } = res;
+  res.end = (chunk, encoding) => {
+    res.end = end;
+    res.end(chunk, encoding);
+    timer.info('Express request', log);
+  };
+
+  return next();
+};
+
 export default logger;
