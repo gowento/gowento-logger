@@ -208,6 +208,13 @@ class Logger {
     });
   }
 
+  // Helper method to create a logger with a namespace
+  namespace(namespace) {
+    return this.clone({ prefix: `[${namespace}] ` });
+  }
+
+
+  // Helper method to create a logger with a timer
   timer() {
     return this.clone({ timer: new Date() });
   }
@@ -252,12 +259,12 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
   }
 
   // Patch res.end to time request execution
-  const timer = logger.timer();
+  const expressLogger = logger.clone({ timer: true, prefix: '[Express] ' });
   const { end } = res;
   res.end = (chunk, encoding) => {
     res.end = end;
     res.end(chunk, encoding);
-    timer.info('Express request', log);
+    expressLogger.info('Express request', log);
   };
 
   return next();

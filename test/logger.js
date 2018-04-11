@@ -11,18 +11,22 @@ test.cb('log exports', t => {
 
   logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
   logger.warn('warn message');
-  logger.error(new Error('Foo'));
+  logger.error(new Error('This is the error message'));
   logger.debug('should be hidden');
 
-  const log2 = logger.clone({
+  const namespacedLogger = logger.namespace('Namespace');
+  namespacedLogger.info('message with a namespace', { data: [{ foo: 1 }, { bar: 2 }] });
+  namespacedLogger.warn('warn message with a namespace');
+  namespacedLogger.error(new Error('This is the error message with a namespace'));
+
+  const productionLogger = logger.clone({
     level: 'debug',
     color: false,
     readable: false,
-    prefix: 'foo.',
   });
 
-  log2.debug('should be visible');
-  log2.warn('no color', { foo: 'bar' });
+  productionLogger.debug('should be visible');
+  productionLogger.warn('no color', { foo: 'bar' });
 
   const timerLogger = logger.timer();
   setTimeout(() => {
