@@ -264,7 +264,7 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
   res.end = (chunk, encoding) => {
     res.end = end;
     res.end(chunk, encoding);
-    expressLogger.info('Express request', log);
+    expressLogger.info('request', log);
   };
 
   return next();
