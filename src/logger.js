@@ -246,10 +246,10 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
     ua: req.get('user-agent'),
   };
 
-  // Add countryCode from Cloudflare IP country header
-  const countryCode = (req.get('cf-ipcountry') || '').toUpperCase();
-  if (countryCode) {
-    log.countryCode = countryCode;
+  // Add country from Cloudflare IP country header
+  const country = (req.get('cf-ipcountry') || '').toUpperCase();
+  if (country) {
+    log.country = country;
   }
 
   // Add requestId from Heroku Request-ID header
@@ -259,7 +259,7 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
   }
 
   // Patch res.end to time request execution
-  const expressLogger = logger.clone({ timer: true, prefix: '[Express] ' });
+  const expressLogger = logger.namespace('Express').timer();
   const { end } = res;
   res.end = (chunk, encoding) => {
     res.end = end;

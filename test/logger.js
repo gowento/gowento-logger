@@ -1,24 +1,35 @@
 import test from 'ava';
-import logger from '../src/logger';
+import MockExpressRequest from 'mock-express-request';
+import MockExpressResponse from 'mock-express-response';
+import delay from 'delay';
+import logger, { expressRequestLoggerMiddleware } from '../src/logger';
 
-test.cb('log exports', t => {
+test('log exports', t => {
   t.is(typeof logger, 'object');
   t.is(typeof logger.debug, 'function');
   t.is(typeof logger.info, 'function');
   t.is(typeof logger.warn, 'function');
   t.is(typeof logger.error, 'function');
   t.is(typeof logger.clone, 'function');
+});
 
+test('default usage', t => {
   logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
   logger.warn('warn message');
   logger.error(new Error('This is the error message'));
   logger.debug('should be hidden');
+  t.pass();
+});
 
+test('namespace usage', t => {
   const namespacedLogger = logger.namespace('Namespace');
   namespacedLogger.info('message with a namespace', { data: [{ foo: 1 }, { bar: 2 }] });
   namespacedLogger.warn('warn message with a namespace');
   namespacedLogger.error(new Error('This is the error message with a namespace'));
+  t.pass();
+});
 
+test('prod env usage', t => {
   const productionLogger = logger.clone({
     level: 'debug',
     color: false,
@@ -27,10 +38,23 @@ test.cb('log exports', t => {
 
   productionLogger.debug('should be visible');
   productionLogger.warn('no color', { foo: 'bar' });
+  t.pass();
+});
 
+test('timer usage', async t => {
   const timerLogger = logger.timer();
-  setTimeout(() => {
-    timerLogger.info('this is a timer', { foo: 'bar' });
+  await delay(500);
+  timerLogger.info('this is a timer', { foo: 'bar' });
+  t.pass();
+});
+
+test.cb('express request middleware usage', t => {
+  const req = new MockExpressRequest();
+  const res = new MockExpressResponse();
+  expressRequestLoggerMiddleware()(req, res, async () => {
+    await delay(50);
+    res.end();
+    t.pass();
     t.end();
-  }, 500);
+  });
 });
