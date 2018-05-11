@@ -2,6 +2,7 @@ const Logfmt = require('logfmt');
 const chalk = require('chalk');
 const flatten = require('flat');
 const figures = require('figures');
+const destroyCircular = require('destroy-circular');
 
 /**
  * Environment variables, with a client-side guard.
@@ -178,7 +179,7 @@ class Logger {
   format(level, message, data) {
     const { color, readable, delimiter } = this.config;
     const value = LEVELS[level];
-    const flat = flatten(data, { delimiter });
+    const flat = flatten(destroyCircular(data), { delimiter });
     const string = logfmt.stringify(readable ? flat : { level, message, ...flat });
     const icon = ICONS[level] || ICONS.default;
 

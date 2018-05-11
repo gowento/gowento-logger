@@ -58,3 +58,9 @@ test.cb('express request middleware usage', t => {
     t.end();
   });
 });
+
+test('should not fail on circular data', t => {
+  const data = { key: 'value' };
+  data.data = data;
+  t.notThrows(() => { logger.info('circular data', data); });
+});
