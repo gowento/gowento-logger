@@ -35,11 +35,11 @@
   "devDependencies": {
     "ava": "0.25.0",
     "babel-cli": "6.26.0",
-    "babel-plugin-lodash": "3.3.2",
+    "babel-plugin-lodash": "3.3.4",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.7.0",
     "babel-register": "6.26.0",
-    "delay": "2.0.0",
+    "delay": "3.0.0",
     "eslint": "4.19.1",
     "eslint-config-gowento": "4.2.0",
     "mock-express-request": "0.2.2",
@@ -52,6 +52,6 @@
     "figures": "2.0.0",
     "flat": "4.0.0",
     "lodash": "4.17.10",
-    "logfmt": "1.2.0"
+    "logfmt": "1.2.1"
   }
 }

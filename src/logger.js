@@ -146,9 +146,14 @@ class Logger {
     }
 
     if (message instanceof Error) {
-      data.error = message;
+      // Special handling of superagent error
+      if (message.response && message.response.error) {
+        data.responseError = message.response.error.message;
+        data.responseBody = message.response.body;
+      }
+
       data.stack = message.stack;
-      message = message.message; // eslint-disable-line prefer-destructuring
+      message = `${message.name}: ${message.message}`;
     }
 
     if (typeof message !== 'string') {
