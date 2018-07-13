@@ -50,7 +50,7 @@
     "chalk": "2.4.1",
     "destroy-circular": "1.1.0",
     "figures": "2.0.0",
-    "flat": "4.0.0",
+    "flat": "4.1.0",
     "lodash": "4.17.10",
     "logfmt": "1.2.1"
   }
