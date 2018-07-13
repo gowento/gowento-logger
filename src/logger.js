@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const flatten = require('flat');
 const figures = require('figures');
 const destroyCircular = require('destroy-circular');
+const requestIp = require('request-ip');
 
 /**
  * Environment variables, with a client-side guard.
@@ -248,7 +249,7 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
     host: req.get('host'),
     path: req.originalUrl || req.path || req.url,
     status: res.statusCode,
-    ip: req.ip || req.get('x-forwarded-for') || req.connection.remoteAddress,
+    ip: requestIp.getClientIp(req),
     ua: req.get('user-agent'),
   };
 
