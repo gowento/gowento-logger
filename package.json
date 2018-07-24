@@ -28,10 +28,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:gowento/logger.git"
+    "url": "https://github.com/gowento/gowento-logger"
   },
   "license": "MIT",
-  "homepage": "https://bitbucket.org/gowento/logger#readme",
+  "homepage": "https://github.com/gowento/gowento-logger",
   "devDependencies": {
     "ava": "0.25.0",
     "babel-cli": "6.26.0",
