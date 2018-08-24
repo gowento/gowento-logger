@@ -194,7 +194,9 @@ class Logger {
       const msg = value > 3 ? chalk.red(message) : message;
       const obj = `${chalk.gray(string)}`;
       return `${tag}\t${msg} ${obj}`;
-    } else if (readable) {
+    }
+
+    if (readable) {
       return `${icon} ${level}\t${message} ${string}`;
     }
 
