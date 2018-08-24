@@ -250,7 +250,6 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
     method: req.method,
     host: req.get('host'),
     path: req.originalUrl || req.path || req.url,
-    status: res.statusCode,
     ip: requestIp.getClientIp(req),
     ua: req.get('user-agent'),
   };
@@ -273,6 +272,7 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
   res.end = (chunk, encoding) => {
     res.end = end;
     res.end(chunk, encoding);
+    log.status = res.statusCode;
     expressLogger.info('request', log);
   };
 
