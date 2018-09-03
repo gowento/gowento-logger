@@ -2,48 +2,49 @@
   "name": "gowento-logger",
   "version": "2.8.0",
   "description": "Gowento Logger",
-  "author": "Gowento",
+  "author": "Gowento <hackers@gowento.com>",
   "contributors": [
     "Eric Redon <eric@gowento.com>",
     "Loris Guignard <loris@gowento.com>"
   ],
-  "main": "dist/logger.js",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/cjs/logger.js",
   "scripts": {
-    "clean": "rimraf dist",
-    "lint": "eslint src test --cache",
-    "prebuild": "yarn run clean -s",
-    "build": "babel --optional runtime src -d dist",
-    "postbuild": "yarn run test -s",
-    "test": "ava",
-    "prepublish": "yarn run build -s",
-    "deploy": "git pull --rebase origin master && git push origin master",
-    "postpublish": "git push origin master --follow-tags"
+    "build": "babel ./src/logger.js --out-file ./dist/cjs/logger.js",
+    "coverage": "nyc npm test && nyc report --reporter=html",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "depcheck": "dependency-check ./package.json --no-default-entry ./src/logger.js",
+    "lint": "eslint ./src ./test",
+    "postcoveralls": "rimraf ./coverage",
+    "prebuild": "npm run lint && npm run depcheck && rimraf ./dist && mkdirp ./dist/cjs",
+    "prepare": "npm run build",
+    "release": "np",
+    "test": "NODE_ENV=test ava"
   },
-  "ava": {
-    "failFast": false,
-    "verbose": false,
-    "require": [
-      "babel-register"
-    ]
-  },
+  "homepage": "https://github.com/gowento/gowento-logger",
   "repository": {
     "type": "git",
     "url": "https://github.com/gowento/gowento-logger"
   },
   "license": "MIT",
-  "homepage": "https://github.com/gowento/gowento-logger",
   "devDependencies": {
-    "ava": "0.25.0",
-    "babel-cli": "6.26.0",
-    "babel-plugin-lodash": "3.3.4",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-preset-env": "1.7.0",
-    "babel-register": "6.26.0",
-    "delay": "3.1.0",
-    "eslint": "5.4.0",
-    "eslint-config-gowento": "5.0.1",
+    "@babel/cli": "7.0.0",
+    "@babel/core": "7.0.0",
+    "@babel/preset-env": "7.0.0",
+    "@babel/register": "7.0.0",
+    "ava": "1.0.0-beta.8",
+    "coveralls": "3.0.2",
+    "delay": "4.0.0",
+    "dependency-check": "3.2.0",
+    "eslint": "5.5.0",
+    "eslint-config-gowento": "5.3.2",
     "mock-express-request": "0.2.2",
     "mock-express-response": "0.2.2",
+    "np": "3.0.4",
+    "nyc": "13.0.1",
+    "prettier": "1.14.2",
     "rimraf": "2.6.2"
   },
   "dependencies": {

@@ -1,3 +1,5 @@
+/* eslint-disable lodash/prefer-lodash-typecheck */
+
 const Logfmt = require('logfmt');
 const chalk = require('chalk');
 const flatten = require('flat');
@@ -80,15 +82,12 @@ class Logger {
 
   constructor(options = {}) {
     const {
-      color = (NODE_ENV !== 'production'),
-      readable = (NODE_ENV !== 'production'),
+      color = NODE_ENV !== 'production',
+      readable = NODE_ENV !== 'production',
       delimiter = '.',
       timer = null,
     } = options;
-    let {
-      level = (LOG_LEVEL || 'info'),
-      prefix = '',
-    } = options;
+    let { level = LOG_LEVEL || 'info', prefix = '' } = options;
 
     if (typeof level !== 'string') {
       level = 'none';
@@ -165,9 +164,8 @@ class Logger {
     const value = LEVELS[level];
     if (value < threshold) return;
 
-
     if (timer) {
-      data.elapsed = `${(new Date() - timer)}ms`;
+      data.elapsed = `${new Date() - timer}ms`;
     }
 
     const output = this.format(level, prefix + message, data);
@@ -186,7 +184,9 @@ class Logger {
     const { color, readable, delimiter } = this.config;
     const value = LEVELS[level];
     const flat = flatten(destroyCircular(data), { delimiter });
-    const string = logfmt.stringify(readable ? flat : { level, message, ...flat });
+    const string = logfmt.stringify(
+      readable ? flat : { level, message, ...flat }
+    );
     const icon = ICONS[level] || ICONS.default;
 
     if (readable && color) {
@@ -221,7 +221,6 @@ class Logger {
   namespace(namespace) {
     return this.clone({ prefix: `[${namespace}] ` });
   }
-
 
   // Helper method to create a logger with a timer
   timer() {

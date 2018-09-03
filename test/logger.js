@@ -23,9 +23,13 @@ test('default usage', t => {
 
 test('namespace usage', t => {
   const namespacedLogger = logger.namespace('Namespace');
-  namespacedLogger.info('message with a namespace', { data: [{ foo: 1 }, { bar: 2 }] });
+  namespacedLogger.info('message with a namespace', {
+    data: [{ foo: 1 }, { bar: 2 }],
+  });
   namespacedLogger.warn('warn message with a namespace');
-  namespacedLogger.error(new Error('This is the error message with a namespace'));
+  namespacedLogger.error(
+    new Error('This is the error message with a namespace')
+  );
   t.pass();
 });
 
@@ -62,5 +66,7 @@ test.cb('express request middleware usage', t => {
 test('should not fail on circular data', t => {
   const data = { key: 'value' };
   data.data = data;
-  t.notThrows(() => { logger.info('circular data', data); });
+  t.notThrows(() => {
+    logger.info('circular data', data);
+  });
 });

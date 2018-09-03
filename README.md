@@ -1,22 +1,28 @@
 # gowento-logger
 
+Gowento Logger
+
 [![NPM version][npm-image]][npm-url]
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![Dependency Status][depstat-image]][depstat-url]
 [![Downloads][download-badge]][npm-url]
 
-> Gowento Logger
-
 ## Install
 
 ```sh
-npm i gowento-logger
+# Using npm
+npm install gowento-logger
+```
+
+```sh
+# Using yarn
+yarn add gowento-logger
 ```
 
 ## Usage
 
 ```js
-import logger from "gowento-logger"
+import logger from 'gowento-logger';
 
 logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
 logger.warn('warn message');
