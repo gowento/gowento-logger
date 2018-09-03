@@ -1,11 +1,11 @@
 /* eslint-disable lodash/prefer-lodash-typecheck */
 
-const Logfmt = require('logfmt');
-const chalk = require('chalk');
-const flatten = require('flat');
-const figures = require('figures');
-const destroyCircular = require('destroy-circular');
-const requestIp = require('request-ip');
+import chalk from 'chalk';
+import destroyCircular from 'destroy-circular';
+import figures from 'figures';
+import flatten from 'flat';
+import Logfmt from 'logfmt';
+import requestIp from 'request-ip';
 
 /**
  * Environment variables, with a client-side guard.
