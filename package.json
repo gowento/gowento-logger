@@ -15,10 +15,10 @@
     "build": "babel ./src/logger.js --out-file ./dist/cjs/logger.js",
     "coverage": "nyc npm test && nyc report --reporter=html",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "depcheck": "dependency-check ./package.json --no-default-entry ./src/logger.js",
+    "depcheck": "dependency-check ./package.json --no-default-entry --entry ./src/logger.js",
     "lint": "eslint ./src ./test",
     "postcoveralls": "rimraf ./coverage",
-    "prebuild": "npm run lint && npm run depcheck && rimraf ./dist && mkdirp ./dist/cjs",
+    "prebuild": "npm run lint && rimraf ./dist && mkdirp ./dist/cjs && npm run depcheck",
     "prepare": "npm run build",
     "release": "np",
     "test": "NODE_ENV=test ava"
