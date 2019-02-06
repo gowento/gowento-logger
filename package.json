@@ -48,12 +48,12 @@
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "chalk": "2.4.1",
+    "chalk": "2.4.2",
     "destroy-circular": "1.1.0",
     "figures": "2.0.0",
     "flat": "4.1.0",
-    "lodash": "4.17.10",
+    "lodash": "4.17.11",
     "logfmt": "1.2.1",
-    "request-ip": "2.1.1"
+    "request-ip": "2.1.3"
   }
 }
