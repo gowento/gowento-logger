@@ -16,8 +16,10 @@ test('log exports', t => {
 test('default usage', t => {
   logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
   logger.warn('warn message');
-  logger.error(new Error('This is the error message'));
+  logger.error(new Error('This is the error message'), { foo: 'bar' });
   logger.debug('should be hidden');
+  logger.log('unknown level', 'foobar');
+  logger.info('data casting', 'foo');
   t.pass();
 });
 
@@ -69,4 +71,11 @@ test('should not fail on circular data', t => {
   t.notThrows(() => {
     logger.info('circular data', data);
   });
+});
+
+test('should not mutate data', t => {
+  const data = { key: 'value' };
+  const dataCopy = Object.assign({}, data);
+  logger.error(new Error('This is the error message'), data);
+  t.deepEqual(data, dataCopy);
 });

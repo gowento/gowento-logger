@@ -67,6 +67,15 @@ const ICONS = {
   default: figures('❯'),
 };
 
+const normalizeLevel = level => {
+  const lowerCasedLevel = (level || '').toLowerCase();
+  if (LEVELS[lowerCasedLevel]) {
+    return lowerCasedLevel;
+  }
+
+  return 'info';
+};
+
 /**
  * Define the `Logger` class.
  *
@@ -82,33 +91,20 @@ class Logger {
 
   constructor(options = {}) {
     const {
+      prefix = '',
       color = NODE_ENV !== 'production',
       readable = NODE_ENV !== 'production',
       delimiter = '.',
       timer = null,
     } = options;
-    let { level = LOG_LEVEL || 'info', prefix = '' } = options;
 
-    if (typeof level !== 'string') {
-      level = 'none';
-    }
-
-    level = level.toLowerCase();
-
-    if (!(level in LEVELS)) {
-      level = 'none';
-    }
-
-    if (typeof prefix !== 'string') {
-      prefix = String(prefix);
-    }
-
+    const level = normalizeLevel(options.level || LOG_LEVEL);
     this.config = {
       level,
       prefix,
       color: !!color,
       readable: !!readable,
-      threshold: level === 'none' ? Infinity : LEVELS[level],
+      threshold: LEVELS[level],
       delimiter,
       timer,
     };
@@ -127,42 +123,26 @@ class Logger {
    */
 
   log(_level, _message, _data) {
-    let level = _level;
+    const { threshold, prefix, timer } = this.config;
+
+    const level = normalizeLevel(_level);
+    const value = LEVELS[level];
+    if (value < threshold) return;
+
+    if (!_message) return;
     let message = _message;
-    let data = _data;
 
-    if (typeof level !== 'string') {
-      level = 'info';
-    }
-
-    level = level.toLowerCase();
-
-    if (!(level in LEVELS)) {
-      level = 'info';
-    }
-
-    if (typeof data !== 'object') {
-      data = {};
+    const data = {};
+    if (typeof _data === 'object') {
+      Object.assign(data, _data);
+    } else if (_data) {
+      message += ` ${_data}`;
     }
 
     if (message instanceof Error) {
-      // Special handling of superagent error
-      if (message.response && message.response.error) {
-        data.responseError = message.response.error.message;
-        data.responseBody = message.response.body;
-      }
-
       data.stack = message.stack;
-      message = `${message.name}: ${message.message}`;
+      message = `${_message.name}: ${_message.message}`;
     }
-
-    if (typeof message !== 'string') {
-      message = String(message);
-    }
-
-    const { threshold, prefix, timer } = this.config;
-    const value = LEVELS[level];
-    if (value < threshold) return;
 
     if (timer) {
       data.elapsed = `${new Date() - timer}ms`;
