@@ -96,6 +96,7 @@ class Logger {
       readable = NODE_ENV !== 'production',
       delimiter = '.',
       timer = null,
+      defaultData = {},
     } = options;
 
     const level = normalizeLevel(options.level || LOG_LEVEL);
@@ -107,6 +108,7 @@ class Logger {
       threshold: LEVELS[level],
       delimiter,
       timer,
+      defaultData,
     };
 
     Object.keys(LEVELS).forEach(key => {
@@ -123,7 +125,7 @@ class Logger {
    */
 
   log(_level, _message, _data) {
-    const { threshold, prefix, timer } = this.config;
+    const { threshold, prefix, timer, defaultData } = this.config;
 
     const level = normalizeLevel(_level);
     const value = LEVELS[level];
@@ -132,9 +134,9 @@ class Logger {
     if (!_message) return;
     let message = _message;
 
-    const data = {};
+    let data = { ...defaultData };
     if (typeof _data === 'object') {
-      Object.assign(data, _data);
+      data = { ...data, ..._data };
     } else if (_data) {
       message += ` ${_data}`;
     }
@@ -198,8 +200,8 @@ class Logger {
   }
 
   // Helper method to create a logger with a namespace
-  namespace(namespace) {
-    return this.clone({ prefix: `[${namespace}] ` });
+  namespace(namespace, defaultData = {}) {
+    return this.clone({ prefix: `[${namespace}] `, defaultData });
   }
 
   // Helper method to create a logger with a timer

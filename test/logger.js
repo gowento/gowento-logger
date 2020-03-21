@@ -24,7 +24,10 @@ test('default usage', t => {
 });
 
 test('namespace usage', t => {
-  const namespacedLogger = logger.namespace('Namespace');
+  const namespacedLogger = logger.namespace('Namespace', {
+    namespaceFoo: 1,
+    namespaceBar: 2,
+  });
   namespacedLogger.info('message with a namespace', {
     data: [{ foo: 1 }, { bar: 2 }],
   });
