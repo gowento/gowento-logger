@@ -75,7 +75,7 @@ test('should not fail on circular data', t => {
 
 test('should not mutate data', t => {
   const data = { key: 'value' };
-  const dataCopy = Object.assign({}, data);
+  const dataCopy = { ...data };
   logger.error(new Error('This is the error message'), data);
   t.deepEqual(data, dataCopy);
 });
