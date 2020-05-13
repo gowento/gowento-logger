@@ -241,6 +241,12 @@ export const expressRequestLoggerMiddleware = () => (req, res, next) => {
     log.country = country;
   }
 
+  // Add IP from Cloudflare CF-Connecting-IP header
+  const cfConnectingIp = req.get('cf-connecting-ip');
+  if (cfConnectingIp) {
+    log.ip = cfConnectingIp;
+  }
+
   // Add requestId from Heroku Request-ID header
   const requestId = req.get('x-request-id');
   if (requestId) {
