@@ -4,7 +4,7 @@ import MockExpressResponse from 'mock-express-response';
 import delay from 'delay';
 import logger, { expressRequestLoggerMiddleware } from '../src/logger';
 
-test('log exports', t => {
+test('log exports', (t) => {
   t.is(typeof logger, 'object');
   t.is(typeof logger.debug, 'function');
   t.is(typeof logger.info, 'function');
@@ -13,7 +13,7 @@ test('log exports', t => {
   t.is(typeof logger.clone, 'function');
 });
 
-test('default usage', t => {
+test('default usage', (t) => {
   logger.info('message', { data: [{ foo: 1 }, { bar: 2 }] });
   logger.warn('warn message');
   logger.error(new Error('This is the error message'), { foo: 'bar' });
@@ -23,7 +23,7 @@ test('default usage', t => {
   t.pass();
 });
 
-test('namespace usage', t => {
+test('namespace usage', (t) => {
   const namespacedLogger = logger.namespace('Namespace', {
     namespaceFoo: 1,
     namespaceBar: 2,
@@ -38,7 +38,7 @@ test('namespace usage', t => {
   t.pass();
 });
 
-test('prod env usage', t => {
+test('prod env usage', (t) => {
   const productionLogger = logger.clone({
     level: 'debug',
     color: false,
@@ -50,14 +50,14 @@ test('prod env usage', t => {
   t.pass();
 });
 
-test('timer usage', async t => {
+test('timer usage', async (t) => {
   const timerLogger = logger.timer();
   await delay(500);
   timerLogger.info('this is a timer', { foo: 'bar' });
   t.pass();
 });
 
-test.cb('express request middleware usage', t => {
+test.cb('express request middleware usage', (t) => {
   const req = new MockExpressRequest();
   const res = new MockExpressResponse();
   expressRequestLoggerMiddleware()(req, res, async () => {
@@ -68,7 +68,7 @@ test.cb('express request middleware usage', t => {
   });
 });
 
-test('should not fail on circular data', t => {
+test('should not fail on circular data', (t) => {
   const data = { key: 'value' };
   data.data = data;
   t.notThrows(() => {
@@ -76,7 +76,7 @@ test('should not fail on circular data', t => {
   });
 });
 
-test('should not mutate data', t => {
+test('should not mutate data', (t) => {
   const data = { key: 'value' };
   const dataCopy = { ...data };
   logger.error(new Error('This is the error message'), data);

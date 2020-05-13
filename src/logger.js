@@ -67,7 +67,7 @@ const ICONS = {
   default: figures('❯'),
 };
 
-const normalizeLevel = level => {
+const normalizeLevel = (level) => {
   const lowerCasedLevel = (level || '').toLowerCase();
   if (LEVELS[lowerCasedLevel]) {
     return lowerCasedLevel;
@@ -111,7 +111,7 @@ class Logger {
       defaultData,
     };
 
-    Object.keys(LEVELS).forEach(key => {
+    Object.keys(LEVELS).forEach((key) => {
       this[key] = (message, data) => this.log(key, message, data);
     });
   }
