@@ -8,11 +8,11 @@
     "Loris Guignard <loris@gowento.com>"
   ],
   "files": [
-    "dist"
+    "src"
   ],
-  "main": "dist/cjs/logger.js",
+  "type": "module",
+  "export": "./src/logger.js",
   "scripts": {
-    "build": "babel ./src/logger.js --out-file ./dist/cjs/logger.js",
     "coverage": "nyc yarn test && nyc report --reporter=html",
     "coveralls": "nyc yarn test && nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./src ./test",

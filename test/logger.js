@@ -2,7 +2,7 @@ import test from 'ava';
 import MockExpressRequest from 'mock-express-request';
 import MockExpressResponse from 'mock-express-response';
 import delay from 'delay';
-import logger, { expressRequestLoggerMiddleware } from '../src/logger';
+import logger, { expressRequestLoggerMiddleware } from '../src/logger.js';
 
 test('log exports', (t) => {
   t.is(typeof logger, 'object');
