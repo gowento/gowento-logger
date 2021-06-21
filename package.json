@@ -18,7 +18,6 @@
     "lint": "eslint ./src ./test",
     "postcoveralls": "rimraf ./coverage",
     "prebuild": "yarn run lint && rimraf ./dist && mkdirp ./dist/cjs",
-    "prepare": "yarn run build",
     "release": "np",
     "test": "NODE_ENV=test ava"
   },
