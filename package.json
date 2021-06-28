@@ -1,6 +1,6 @@
 {
   "name": "gowento-logger",
-  "version": "3.1.0",
+  "version": "4.0.2-beta",
   "description": "Gowento Logger",
   "author": "Gowento <hackers@gowento.com>",
   "contributors": [
@@ -8,17 +8,15 @@
     "Loris Guignard <loris@gowento.com>"
   ],
   "files": [
-    "dist"
+    "src"
   ],
-  "main": "dist/cjs/logger.js",
+  "type": "module",
+  "main": "./src/logger.js",
   "scripts": {
-    "build": "babel ./src/logger.js --out-file ./dist/cjs/logger.js",
     "coverage": "nyc yarn test && nyc report --reporter=html",
     "coveralls": "nyc yarn test && nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./src ./test",
     "postcoveralls": "rimraf ./coverage",
-    "prebuild": "yarn run lint && rimraf ./dist && mkdirp ./dist/cjs",
-    "prepare": "yarn run build",
     "release": "np",
     "test": "NODE_ENV=test ava"
   },
