@@ -17,7 +17,6 @@
     "coveralls": "nyc yarn test && nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./src ./test",
     "postcoveralls": "rimraf ./coverage",
-    "prebuild": "yarn run lint && rimraf ./dist && mkdirp ./dist/cjs",
     "release": "np",
     "test": "NODE_ENV=test ava"
   },
