@@ -11,7 +11,7 @@
     "src"
   ],
   "type": "module",
-  "export": "./src/logger.js",
+  "main": "./src/logger.js",
   "scripts": {
     "coverage": "nyc yarn test && nyc report --reporter=html",
     "coveralls": "nyc yarn test && nyc report --reporter=text-lcov | coveralls",
