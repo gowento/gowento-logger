@@ -57,15 +57,17 @@ test('timer usage', async (t) => {
   t.pass();
 });
 
-test.cb('express request middleware usage', (t) => {
+test('express request middleware usage', async (t) => {
   const req = new MockExpressRequest();
   const res = new MockExpressResponse();
-  expressRequestLoggerMiddleware()(req, res, async () => {
-    await delay(50);
-    res.end();
-    t.pass();
-    t.end();
+  await new Promise((resolve) => {
+    expressRequestLoggerMiddleware()(req, res, async () => {
+      await delay(50);
+      res.end();
+      resolve();
+    });
   });
+  t.pass();
 });
 
 test('should not fail on circular data', (t) => {

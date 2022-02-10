@@ -59,12 +59,12 @@ const COLORS = {
  */
 
 const ICONS = {
-  debug: figures('…'),
-  info: figures('ℹ'),
-  start: figures('✔'),
-  warn: figures('⚠'),
-  error: figures('✖'),
-  default: figures('❯'),
+  debug: figures.ellipsis,
+  info: figures.info,
+  start: figures.tick,
+  warn: figures.warning,
+  error: figures.cross,
+  default: figures.pointer,
 };
 
 const normalizeLevel = (level) => {
