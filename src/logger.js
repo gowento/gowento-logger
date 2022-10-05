@@ -6,6 +6,7 @@ import figures from 'figures';
 import flatten from 'flat';
 import Logfmt from 'logfmt';
 import requestIp from 'request-ip';
+import InsightOpsLogger from 'r7insight_node';
 
 /**
  * Environment variables, with a client-side guard.
@@ -15,6 +16,14 @@ import requestIp from 'request-ip';
 
 const LOG_LEVEL = typeof process !== 'undefined' && process.env.LOG_LEVEL;
 const NODE_ENV = typeof process !== 'undefined' && process.env.NODE_ENV;
+
+let insightOpsLog;
+if (process.env.INSIGHT_OPS_TOKEN) {
+  insightOpsLog = new InsightOpsLogger({
+    token: process.env.INSIGHT_OPS_TOKEN,
+    region: 'fr',
+  });
+}
 
 /**
  * Logfmt helper.
@@ -152,6 +161,9 @@ class Logger {
 
     const output = this.format(level, prefix + message, data);
     console.log(output); // eslint-disable-line no-console
+    if (insightOpsLog) {
+      insightOpsLog[level](output);
+    }
   }
 
   /**
