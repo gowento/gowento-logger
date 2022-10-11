@@ -18,10 +18,10 @@ const LOG_LEVEL = typeof process !== 'undefined' && process.env.LOG_LEVEL;
 const NODE_ENV = typeof process !== 'undefined' && process.env.NODE_ENV;
 
 let insightOpsLog;
-if (process.env.INSIGHT_OPS_TOKEN) {
+if (process.env.VITE_INSIGHT_OPS_TOKEN) {
   insightOpsLog = new InsightOpsLogger({
-    token: process.env.INSIGHT_OPS_TOKEN,
-    region: 'fr',
+    token: process.env.VITE_INSIGHT_OPS_TOKEN,
+    region: 'eu',
   });
 }
 
@@ -45,6 +45,20 @@ const LEVELS = {
   start: 2,
   warn: 3,
   error: 4,
+};
+
+/**
+ * InsightOps Log levels.
+ *
+ * @type {Object}
+ */
+
+const R7_INSIGHT_LEVELS = {
+  debug: 'debug',
+  info: 'info',
+  start: 'info',
+  warn: 'warning',
+  error: 'err',
 };
 
 /**
@@ -162,7 +176,7 @@ class Logger {
     const output = this.format(level, prefix + message, data);
     console.log(output); // eslint-disable-line no-console
     if (insightOpsLog) {
-      insightOpsLog[level](output);
+      insightOpsLog[R7_INSIGHT_LEVELS[level]](output);
     }
   }
 
