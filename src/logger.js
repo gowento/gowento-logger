@@ -22,6 +22,7 @@ if (process.env.INSIGHT_OPS_TOKEN) {
   insightOpsLog = new InsightOpsLogger({
     token: process.env.INSIGHT_OPS_TOKEN,
     region: 'eu',
+    withHostname: true,
   });
 }
 
@@ -45,20 +46,6 @@ const LEVELS = {
   start: 2,
   warn: 3,
   error: 4,
-};
-
-/**
- * InsightOps Log levels.
- *
- * @type {Object}
- */
-
-const R7_INSIGHT_LEVELS = {
-  debug: 'debug',
-  info: 'info',
-  start: 'info',
-  warn: 'warning',
-  error: 'err',
 };
 
 /**
@@ -176,7 +163,7 @@ class Logger {
     const output = this.format(level, prefix + message, data);
     console.log(output); // eslint-disable-line no-console
     if (insightOpsLog) {
-      insightOpsLog[R7_INSIGHT_LEVELS[level]](output);
+      insightOpsLog.log(output);
     }
   }
 
