@@ -18,9 +18,9 @@ const LOG_LEVEL = typeof process !== 'undefined' && process.env.LOG_LEVEL;
 const NODE_ENV = typeof process !== 'undefined' && process.env.NODE_ENV;
 
 let insightOpsLog;
-if (process.env.VITE_INSIGHT_OPS_TOKEN) {
+if (process.env.INSIGHT_OPS_TOKEN) {
   insightOpsLog = new InsightOpsLogger({
-    token: process.env.VITE_INSIGHT_OPS_TOKEN,
+    token: process.env.INSIGHT_OPS_TOKEN,
     region: 'eu',
   });
 }
