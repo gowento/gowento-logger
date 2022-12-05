@@ -161,9 +161,11 @@ class Logger {
     }
 
     const output = this.format(level, prefix + message, data);
-    console.log(output); // eslint-disable-line no-console
+
     if (insightOpsLog) {
       insightOpsLog.log(output);
+    } else {
+      console.log(output); // eslint-disable-line no-console
     }
   }
 
